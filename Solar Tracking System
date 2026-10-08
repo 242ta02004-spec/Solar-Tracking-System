@@ -1,0 +1,70 @@
+
+# Solar Tracking System
+# EEE Mini Project - Python Simulation
+
+import time
+import random
+
+# Tracking settings
+THRESHOLD = 50
+MAX_ITERATIONS = 10
+
+# Simulated servo position
+panel_angle = 90
+
+
+def read_ldr_sensors():
+    """Simulate left and right LDR sensor readings."""
+    left_ldr = random.randint(100, 900)
+    right_ldr = random.randint(100, 900)
+    return left_ldr, right_ldr
+
+
+def track_sun(left_ldr, right_ldr):
+    """Adjust panel angle according to light difference."""
+    global panel_angle
+
+    difference = left_ldr - right_ldr
+
+    if difference > THRESHOLD:
+        panel_angle = min(panel_angle + 5, 180)
+        print("Sunlight is stronger on the LEFT.")
+        print("Moving panel LEFT.")
+
+    elif difference < -THRESHOLD:
+        panel_angle = max(panel_angle - 5, 0)
+        print("Sunlight is stronger on the RIGHT.")
+        print("Moving panel RIGHT.")
+
+    else:
+        print("Sunlight is balanced.")
+        print("Panel position maintained.")
+
+    return panel_angle
+
+
+def main():
+    print("=" * 45)
+    print("       SOLAR TRACKING SYSTEM")
+    print("=" * 45)
+    print("Starting solar tracking simulation...\n")
+
+    for iteration in range(1, MAX_ITERATIONS + 1):
+        left_ldr, right_ldr = read_ldr_sensors()
+
+        print(f"\nReading {iteration}")
+        print("-" * 30)
+        print(f"Left LDR Reading  : {left_ldr}")
+        print(f"Right LDR Reading : {right_ldr}")
+
+        angle = track_sun(left_ldr, right_ldr)
+
+        print(f"Solar Panel Angle : {angle} degrees")
+        time.sleep(1)
+
+    print("\nTracking simulation completed.")
+    print(f"Final Panel Angle: {panel_angle} degrees")
+
+
+if __name__ == "__main__":
+    main()
